@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useActiveAccount } from 'thirdweb/react';
+import { Contract, ethers } from 'ethers';
 import { ethers, Contract } from 'ethers';
 import { Taiko } from '@thirdweb-dev/chains';
 
