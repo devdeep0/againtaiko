@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useActiveAccount } from "thirdweb/react";
 import { BarChart3, Home, Menu } from 'lucide-react'
 import { motion } from "framer-motion"
+import { Button } from "@headlessui/react";
+import { shortenAddress } from "thirdweb/utils";
 interface GameSelectionUIProps {
   isLoading: boolean;
   selectedGame: string;
@@ -61,6 +63,22 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
           
     
         </div>
+        <div className="flex justify-center items-center h-full pr-2">
+        {account ? 
+            (
+            <> 
+            <Button onClick={() => (window as any).Telegram.WebApp.openLink(`https://etherscan.io/address/${account.address}`)} className="inline-flex items-center gap-2 rounded-[4px] font-raj underline underline-offset-4 decoration-[#19AE00] decoration-4 decoration-solid bg-transparent border-2 border-white py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">{shortenAddress(account.address)}</Button>  
+            </>
+            ) 
+          : (
+              <p className="text-sm text-zinc-400">fetching smart account</p>
+            )}      
+
+              
+              {/* {!isBalanceLoading && tokenBalance && (
+                <span className="ml-2">{tokenBalance.displayValue} {tokenBalance.symbol}</span>
+              )} */}
+            </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
 
