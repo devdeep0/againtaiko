@@ -6,6 +6,8 @@ import { BarChart3, Home, Menu } from 'lucide-react'
 import { motion } from "framer-motion"
 import { Button } from "@headlessui/react";
 import { shortenAddress } from "thirdweb/utils";
+import { Taiko } from '@thirdweb-dev/chains';
+
 import TokenBalance from '../components/TokenBalance';
 
 interface GameSelectionUIProps {
