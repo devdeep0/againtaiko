@@ -6,10 +6,6 @@ import { BarChart3, Home, Menu } from 'lucide-react'
 import { motion } from "framer-motion"
 import { Button } from "@headlessui/react";
 import { shortenAddress } from "thirdweb/utils";
-import { Taiko } from '@thirdweb-dev/chains';
-
-import TokenBalance from '../components/TokenBalance';
-
 interface GameSelectionUIProps {
   isLoading: boolean;
   selectedGame: string;
@@ -82,9 +78,6 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
               {/* {!isBalanceLoading && tokenBalance && (
                 <span className="ml-2">{tokenBalance.displayValue} {tokenBalance.symbol}</span>
               )} */}
-              <TokenBalance 
-                contractAddress="0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3" 
-              />
             </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
