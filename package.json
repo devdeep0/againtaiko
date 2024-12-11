@@ -11,7 +11,6 @@
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@tanstack/react-query": "^5.51.18",
-    "ethers": "^5.7.2",
     "@thirdweb-dev/chains": "^0.1.120",
     "ethers": "^6.13.4",
     "framer-motion": "^11.11.1",
@@ -22,7 +21,7 @@
     "react-icons": "^5.3.0",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "thirdweb": "^5"
+    "thirdweb": "^5.68.0"
   },
   "devDependencies": {
     "@thirdweb-dev/chains": "^0.1.120",
