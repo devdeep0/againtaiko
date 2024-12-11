@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useActiveAccount } from 'thirdweb/react';
-import { Contract, ethers } from 'ethers';
-import { ethers, Contract } from 'ethers';
+import { ethers } from 'ethers';
 import { Taiko } from '@thirdweb-dev/chains';
+import { utils, Contract } from 'ethers';
 
 interface TokenBalanceProps {
   walletAddress: string;
@@ -32,15 +31,16 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ walletAddress, contractAddr
       }
 
       try {
-        // Create provider
-        const provider = new ethers.JsonRpcProvider(Taiko.rpc[0]);
+        // Using providers.JsonRpcProvider for ethers v5
+        const provider = new ethers.providers.JsonRpcProvider(Taiko.rpc[0]);
         
         // Create contract instance
         const contract = new Contract(contractAddress, minABI, provider);
         
         // Fetch balance
         const rawBalance = await contract.balanceOf(walletAddress);
-        const formattedBalance = ethers.formatUnits(rawBalance, 18);
+        // Using utils.formatUnits for ethers v5
+        const formattedBalance = utils.formatUnits(rawBalance, 18);
         setBalance(formattedBalance);
       } catch (err) {
         console.error('Error fetching balance:', err);
