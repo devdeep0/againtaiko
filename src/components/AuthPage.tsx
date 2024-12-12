@@ -61,6 +61,7 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
  const [Active, setActive] = useState("home");
  const [showComingSoon, setShowComingSoon] = useState(false);
  const [comingSoonMessage, setComingSoonMessage] = useState("");
+ const [resp, setResp] = useState("")
  useEffect(() => {
    if (showComingSoon) {
      const timer = setTimeout(() => setShowComingSoon(false), 3000);
@@ -76,7 +77,7 @@ useEffect(()=>{
   try {
       const response = await getERC20Balance(address);
       console.log(response);
-       
+       setResp(response)
       setBalance(response.displayValue);
   } catch (error) {
       console.error('Failed to get balance:', error);
@@ -120,6 +121,7 @@ useEffect(()=>{
 
               
               <div>balance : {balance}</div>
+              <div>response : {resp}</div>
             </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
