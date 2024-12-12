@@ -22,7 +22,7 @@ import React from 'react'
             
       
             const data = await response.json();
-            return data; // Access the first item in the array and get its result
+            return data; 
           } catch (error) {
             console.error('Error:', error);
             throw error;

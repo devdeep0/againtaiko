@@ -13,7 +13,30 @@ interface GameSelectionUIProps {
 
 
 }
+async function getERC20Balance(walletAddress:any) {
 
+  const url = `https://c227651d.engine-usw2.thirdweb.com/contract/167000/0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3/erc20/balance-of?wallet_address=${walletAddress}`;
+
+  try {
+      const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization':`Bearer ${process.env.ACCESS_TOKEN}`,
+              'x-backend-wallet-address': `${process.env.BACKEND_WALLET_ADDRESS}`
+          }
+
+      });
+
+      
+
+      const data = await response.json();
+      return data.result.displayValue; // Access the first item in the array and get its result
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
 
 
 const gamePreviewData = [
@@ -47,32 +70,25 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
    }
  }, [showComingSoon]);
 
+useEffect(() => {
+  checkERC20Balance();
+}, [address]); 
 
-
-const getERC20Balance = async () => {
-  if (!address ) return;
-
-
+async function checkERC20Balance() {
   try {
-  const response = await fetch('/api/getBalance', {
-      method: 'GET',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-      userWalletAddress: address,
-      }),
-  });
-
-  const resp = await response.json();
-  setBalance(resp.result.displayValue)
-
- 
+    const result = await getERC20Balance("0x3C9B7bDdDb65a1543aa3E56F8539ac48ACDF9Ac1");
+    console.log('Balance result:', result);
+    setResp(result);
+    setBalance(parseFloat(result));
   } catch (error) {
-      console.error('Error claiming reward:', error);
-  } 
-
+    console.error('Failed to get balance:', error);
+    // Handle the error instead of throwing it
+    setBalance(0);
+  }
 }
+
+
+
 
   return (
     <div className="h-screen bg-black text-white bg-[url('/bg/BG.png')] bg-cover bg-center">
@@ -107,7 +123,7 @@ const getERC20Balance = async () => {
 
               
               <div>balance : {balance}</div>
-              <button onClick={getERC20Balance}>clickme</button>
+              <button onClick={checkERC20Balance}>clickme</button>
             </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
