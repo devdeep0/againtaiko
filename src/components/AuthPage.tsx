@@ -31,7 +31,7 @@ async function getERC20Balance(walletAddress:any) {
       
 
       const data = await response.json();
-      return data.result.displayValue; // Access the first item in the array and get its result
+      return data; // Access the first item in the array and get its result
     } catch (error) {
       console.error('Error:', error);
       throw error;
@@ -49,7 +49,7 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
   const address = useActiveAccount()?.address;
   const [activeButton, setActiveButton] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [balance,setBalance] = useState(0);
+  const [balance,setBalance] = useState('');
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % gamePreviewData.length)
@@ -79,11 +79,11 @@ async function checkERC20Balance() {
     const result = await getERC20Balance("0x3C9B7bDdDb65a1543aa3E56F8539ac48ACDF9Ac1");
     console.log('Balance result:', result);
     setResp(result);
-    setBalance(parseFloat(result));
+    setBalance(result);
   } catch (error) {
     console.error('Failed to get balance:', error);
     // Handle the error instead of throwing it
-    setBalance(0);
+    setBalance("failed")
   }
 }
 
