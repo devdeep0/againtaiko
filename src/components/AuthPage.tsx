@@ -74,9 +74,10 @@ useEffect(()=>{
 
  async function checkERC20Balance() {
   try {
-      const displayValue = await getERC20Balance(address);
-      console.log(displayValue);
-       setBalance(displayValue);
+      const response = await getERC20Balance(address);
+      console.log(response);
+       
+      setBalance(response.displayValue);
   } catch (error) {
       console.error('Failed to get balance:', error);
       throw error;
