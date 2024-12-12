@@ -49,7 +49,7 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
   const address = useActiveAccount()?.address;
   const [activeButton, setActiveButton] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [balance,setBalance] = useState(0);
+  const [balance,setBalance] = useState("");
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % gamePreviewData.length)
