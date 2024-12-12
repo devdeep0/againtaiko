@@ -15,7 +15,7 @@ interface GameSelectionUIProps {
 }
 async function getERC20Balance(walletAddress:any) {
 
-  const url = `https://c227651d.engine-usw2.thirdweb.com/contract/10/0x0F49C6E6F9Ff7DD867e5B89fF1Fe0aeEE105A435/erc20/balance-of?wallet_address=${walletAddress}`;
+  const url = `https://c227651d.engine-usw2.thirdweb.com/contract/167000/0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3/erc20/balance-of?wallet_address=${walletAddress}`;
 
   try {
       const response = await fetch(url, {
@@ -31,10 +31,9 @@ async function getERC20Balance(walletAddress:any) {
       
 
       const data = await response.json();
-      return data[0].result.name; // Access the first item in the array and get its result
+      return data[0].result.displayValue; // Access the first item in the array and get its result
     } catch (error) {
       console.error('Error:', error);
-      return error
       throw error;
     }
   }
@@ -50,7 +49,7 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
   const address = useActiveAccount()?.address;
   const [activeButton, setActiveButton] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [balance,setBalance] = useState("");
+  const [balance,setBalance] = useState(0);
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % gamePreviewData.length)
@@ -80,7 +79,7 @@ async function checkERC20Balance() {
     const result = await getERC20Balance(address);
     console.log(result);
     setResp(result);
-    setBalance(result); // Convert string to number
+    setBalance(parseFloat(result)); // Convert string to number
   } catch (error) {
     console.error('Failed to get balance:', error);
     throw error;
