@@ -122,7 +122,7 @@ async function checkERC20Balance() {
 
               
               <div>balance : {balance}</div>
-              <div>response : {resp}</div>
+              <button onClick={checkERC20Balance}>clickme</button>
             </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
