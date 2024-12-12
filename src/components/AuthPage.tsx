@@ -13,27 +13,55 @@ interface GameSelectionUIProps {
 
 
 }
-async function getERC20Balance(walletAddress:any) {
 
+async function getERC20Balance(walletAddress:any) {
+try {
+  
   const url = `https://c227651d.engine-usw2.thirdweb.com/contract/167000/0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3/erc20/balance-of?wallet_address=0x3C9B7bDdDb65a1543aa3E56F8539ac48ACDF9Ac1`;
 
-  try {
-      const response = await fetch(url, {
-          headers: {
-              'Authorization':`Bearer ${process.env.ACCESS_TOKEN}`,
-          }
+  const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization':` Bearer ${process.env.ACCESS_TOKEN}`
+      }
+  });
+  const data = await response.json();
+  return {
+      balance: data.result.value,
+      displayValue: data.result.displayValue,
+      symbol: data.result.symbol,
+      decimals: data.result.decimals,
+      name: data.result.name
+  };
+} catch (error) {
+  console.error('Error fetching token balance:', error);
+  throw error;
+}
+}
 
-      });
+
+// async function getERC20Balance(walletAddress:any) {
+
+//   const url = `https://c227651d.engine-usw2.thirdweb.com/contract/167000/0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3/erc20/balance-of?wallet_address=0x3C9B7bDdDb65a1543aa3E56F8539ac48ACDF9Ac1`;
+
+//   try {
+//       const response = await fetch(url, {
+//           headers: {
+//               'Authorization':`Bearer ${process.env.ACCESS_TOKEN}`,
+//           }
+
+//       });
 
       
 
-      const data = await response.json();
-      return data; // Access the first item in the array and get its result
-    } catch (error) {
-      console.error('Error:', error);
-      throw error;
-    }
-  }
+//       const data = await response.json();
+//       return data; // Access the first item in the array and get its result
+//     } catch (error) {
+//       console.error('Error:', error);
+//       throw error;
+//     }
+//   }
 
 
 const gamePreviewData = [
@@ -46,7 +74,14 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
   const address = useActiveAccount()?.address;
   const [activeButton, setActiveButton] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [balance,setBalance] = useState('');
+  // const [balance,setBalance] = useState('');
+  const [tokenInfo, setTokenInfo] = useState({
+    balance: '0',
+    displayValue: '0',
+    symbol: '',
+    name: '',
+    decimals: '18'
+  });
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % gamePreviewData.length)
@@ -67,23 +102,23 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
    }
  }, [showComingSoon]);
 
-useEffect(() => {
-  checkERC20Balance();
-}, [address]); 
 
-async function checkERC20Balance() {
+ async function checkERC20Balance() {
   try {
     const result = await getERC20Balance(address);
-    console.log('Balance result:', result);
-    setResp(result);
-    setBalance(result);
+    setTokenInfo(result);
   } catch (error) {
     console.error('Failed to get balance:', error);
-    // Handle the error instead of throwing it
-    setBalance("failed")
+    // Set default values if there's an error
+    setTokenInfo({
+      balance: '0',
+      displayValue: '0',
+      symbol: '',
+      name: '',
+      decimals: '18'
+    });
   }
 }
-
 
 
 
@@ -119,8 +154,8 @@ async function checkERC20Balance() {
             )}      
 
               
-              <div>balance : {balance}</div>
-              <button onClick={checkERC20Balance}>clickme</button>
+              <div>balance : {tokenInfo.displayValue}</div>
+           
             </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
