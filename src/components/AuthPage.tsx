@@ -70,19 +70,20 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
    }
  }, [showComingSoon]);
 
-useEffect(()=>{
+ useEffect(() => {
   checkERC20Balance();
-}),[address]
+}, [address]); 
 
 async function checkERC20Balance() {
   try {
     const result = await getERC20Balance(address);
-    console.log(result);
+    console.log('Balance result:', result);
     setResp(result);
-    setBalance(parseFloat(result)); // Convert string to number
+    setBalance(parseFloat(result));
   } catch (error) {
     console.error('Failed to get balance:', error);
-    throw error;
+    // Handle the error instead of throwing it
+    setBalance(0);
   }
 }
 
