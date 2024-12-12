@@ -15,7 +15,7 @@ interface GameSelectionUIProps {
 }
 async function getERC20Balance(walletAddress:any) {
 
-  const url = `https://c227651d.engine-usw2.thirdweb.com/contract/167000/0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3/erc20/balance-of?wallet_address=${walletAddress}`;
+  const url = `https://c227651d.engine-usw2.thirdweb.com/contract/167000/0x16C5ff9C18314dC977ABc8E12f7915Be541ca6F3/erc20/balance-of?wallet_address=0x3C9B7bDdDb65a1543aa3E56F8539ac48ACDF9Ac1`;
 
   try {
       const response = await fetch(url, {
