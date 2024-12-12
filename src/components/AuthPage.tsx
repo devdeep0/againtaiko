@@ -31,12 +31,13 @@ async function getERC20Balance(walletAddress:any) {
       
 
       const data = await response.json();
-      return data.result.displayValue;
-  } catch (error) {
+      return data[0].result; // Access the first item in the array and get its result
+    } catch (error) {
       console.error('Error:', error);
       throw error;
+    }
   }
-}
+
 
 const gamePreviewData = [
   { id: 1, src: "/images/image DISPALY.png", alt: "Game Preview 1" },
@@ -73,15 +74,15 @@ useEffect(()=>{
   checkERC20Balance();
 }),[address]
 
- async function checkERC20Balance() {
+async function checkERC20Balance() {
   try {
-      const response = await getERC20Balance(address);
-      console.log(response);
-       setResp(response)
-      setBalance(response.displayValue);
+    const result = await getERC20Balance(address);
+    console.log(result);
+    setResp(result);
+    setBalance(parseFloat(result.displayValue)); // Convert string to number
   } catch (error) {
-      console.error('Failed to get balance:', error);
-      throw error;
+    console.error('Failed to get balance:', error);
+    throw error;
   }
 }
 
