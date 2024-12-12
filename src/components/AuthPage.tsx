@@ -31,7 +31,7 @@ async function getERC20Balance(walletAddress:any) {
       
 
       const data = await response.json();
-      return data[0].result.displayValue; // Access the first item in the array and get its result
+      return data.result.displayValue; // Access the first item in the array and get its result
     } catch (error) {
       console.error('Error:', error);
       throw error;
