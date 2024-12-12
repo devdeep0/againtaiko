@@ -13,6 +13,30 @@ interface GameSelectionUIProps {
 
 
 }
+async function getERC20Balance(walletAddress:any) {
+
+  const url = `https://c227651d.engine-usw2.thirdweb.com/contract/10/0x0F49C6E6F9Ff7DD867e5B89fF1Fe0aeEE105A435/erc20/balance-of?wallet_address=${walletAddress}`;
+
+  try {
+      const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization':`Bearer ${process.env.ACCESS_TOKEN}`,
+              'x-backend-wallet-address': `${process.env.BACKEND_WALLET_ADDRESS}`
+          }
+
+      });
+
+      
+
+      const data = await response.json();
+      return data.result.displayValue;
+  } catch (error) {
+      console.error('Error:', error);
+      throw error;
+  }
+}
 
 const gamePreviewData = [
   { id: 1, src: "/images/image DISPALY.png", alt: "Game Preview 1" },
@@ -21,9 +45,10 @@ const gamePreviewData = [
 ]
 
 const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedGame, onGameSelect }) => {
-  const account = useActiveAccount();
+  const address = useActiveAccount()?.address;
   const [activeButton, setActiveButton] = useState('');
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [balance,setBalance] = useState(0);
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % gamePreviewData.length)
@@ -42,6 +67,24 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
      return () => clearTimeout(timer); // Cleanup the timer on unmount
    }
  }, [showComingSoon]);
+
+useEffect(()=>{
+  checkERC20Balance();
+}),[address]
+
+ async function checkERC20Balance() {
+  try {
+      const displayValue = await getERC20Balance(address);
+      console.log(displayValue);
+       setBalance(displayValue);
+  } catch (error) {
+      console.error('Failed to get balance:', error);
+      throw error;
+  }
+}
+
+
+
 
   return (
     <div className="h-screen bg-black text-white bg-[url('/bg/BG.png')] bg-cover bg-center">
@@ -64,10 +107,10 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
     
         </div>
         <div className="flex justify-center items-center h-full pr-2">
-        {account ? 
+        {address ? 
             (
             <> 
-            <Button onClick={() => (window as any).Telegram.WebApp.openLink(`https://etherscan.io/address/${account.address}`)} className="inline-flex items-center gap-2 rounded-[4px] font-raj underline underline-offset-4 decoration-[#19AE00] decoration-4 decoration-solid bg-transparent border-2 border-white py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">{shortenAddress(account.address)}</Button>  
+            <Button onClick={() => (window as any).Telegram.WebApp.openLink(`https://etherscan.io/address/${address}`)} className="inline-flex items-center gap-2 rounded-[4px] font-raj underline underline-offset-4 decoration-[#19AE00] decoration-4 decoration-solid bg-transparent border-2 border-white py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">{shortenAddress(address)}</Button>  
             </>
             ) 
           : (
@@ -75,9 +118,7 @@ const GameSelectionUI : React.FC<GameSelectionUIProps> = ({ isLoading, selectedG
             )}      
 
               
-              {/* {!isBalanceLoading && tokenBalance && (
-                <span className="ml-2">{tokenBalance.displayValue} {tokenBalance.symbol}</span>
-              )} */}
+              <div>balance : {balance}</div>
             </div>
         <div className="text-sm font-semibold tracking-widest text-pink-500 mt-3">GAMES</div>
       </div>
